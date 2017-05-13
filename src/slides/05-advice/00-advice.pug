@@ -1,0 +1,89 @@
+section
+    h2 Advice
+    p Action taken by an aspect at a particular join point. Different types of advice include "around," "before" and "after" advice.
+
+section
+    h2 @Before
+    pre.
+        <code>
+
+        @Before("com.xyz.myapp.SystemArchitecture.dataAccessOperation()")
+        public void doAccessCheck() {
+            // ...
+        }
+
+        @Before("execution(* com.xyz.myapp.dao.*.*(..))")
+        public void doAccessCheck() {
+            // ...
+        }
+
+        </code>
+
+
+section
+    h2 @AfterReturning
+    pre.
+        <code>
+        @AfterReturning(
+                pointcut="com.xyz.myapp.SystemArchitecture.dataAccessOperation()",
+                returning="retVal")
+        public void doAccessCheck(Object retVal) {
+            // ...
+        }
+        </code>
+
+section
+    h2 @AfterThrowing
+    pre.
+        <code>
+        @AfterThrowing(
+                pointcut="com.xyz.myapp.SystemArchitecture.dataAccessOperation()",
+                throwing="ex")
+        public void doRecoveryActions(DataAccessException ex) {
+            // ...
+        }
+        </code>
+
+section
+    h2 @After (finally)
+    p Needs to handle normal and exception exits
+    pre.
+        <code>
+        @After("com.xyz.myapp.SystemArchitecture.dataAccessOperation()")
+        public void doReleaseLock() {
+            // ...
+        }
+        </code>
+
+section
+    h2 @Around
+    pre.
+        <code>
+        @Around("com.xyz.myapp.SystemArchitecture.businessService()")
+            public Object doBasicProfiling(ProceedingJoinPoint pjp) throws Throwable {
+                // start stopwatch
+                Object retVal = pjp.proceed();
+                // stop stopwatch
+                return retVal;
+        }
+        </code>
+
+section
+    h2 ProceedingJoinPoint
+    ul
+        li "proceed()" causes the underlying method to execute
+        li may be invoked once, many times, or not at all within the body of the around advice, all of these are quite legal.
+        li may be called with passing in Object[].  That array will be used by the underlying method when it executes
+
+section
+    h2 Join Point Info
+    ul
+        li Any advice can have first parameter of type JoinPoint
+        li ProceedingJoinPoint is a subclass of JoinPoint
+        li Has Methods like:
+            ul
+                li getArgs()
+                li getThis()
+                li getTarget()
+                li getSignature()
+                li and more
