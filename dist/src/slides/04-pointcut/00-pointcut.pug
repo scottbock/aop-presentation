@@ -1,0 +1,88 @@
+section
+    h2 Pointcut
+    p A predicate that matches join points. Advice is associated with a pointcut expression and runs at any join point matched by the pointcut (for example, the execution of a method with a certain name). The concept of join points as matched by pointcut expressions is central to AOP, and Spring uses the AspectJ pointcut expression language by default.
+
+section
+    h2 Pointcut Types
+    ul
+        li execution
+        li within
+        li this
+        li target
+        li args
+        li @target
+        li @args
+        li @within
+        li @annotation
+        li bean
+
+section
+    h2 Pointcut Example
+    pre.
+        <code class="java" data-trim>
+
+        @Pointcut("execution(public * *(..))")
+        private void anyPublicOperation() {}
+
+        @Pointcut("within(com.bock.aopDemo.trading..*)")
+        private void inTrading() {}
+
+        @Pointcut("anyPublicOperation() && inTrading()")
+        private void tradingOperation() {}
+
+        </code>
+
+section
+    h2 Execution Examples
+    p Match Methods
+    ul
+        li execution(public * *(..))
+        li execution(* set*(..))
+        li execution(* com.xyz.service.AccountService.*(..))
+        li execution(* com.xyz.service.*.*(..))
+        li execution(* com.xyz.service..*.*(..))
+
+section
+    h2 Within Examples
+    p Match Types
+    ul
+        li within(com.xyz.service.*)
+        li within(com.xyz.service..*)
+
+section
+    h2 Examples
+    p Usually used in binding form
+    ul
+        li this(com.xyz.service.AccountService) - match actual object
+        li target(com.xyz.service.AccountService) - match declared
+        li args(java.io.Serializable)
+        li @target(org.springframework.transaction.annotation.Transactional)
+        li @within(org.springframework.transaction.annotation.Transactional)
+        li @annotation(org.springframework.transaction.annotation.Transactional)
+        li @args(com.xyz.security.Classified)
+        li bean(tradeService)
+        li bean(*Service)
+
+section
+    h2 Binding Form?
+    p.
+        If a parameter name is used in place of a type name in an args expression,
+        then the value of the corresponding argument will be passed as the parameter value when the advice is invoked.
+
+section
+    h2 Binding Example
+    pre.
+        <code class="java" data-trim>
+
+        @Before("com.xyz.myapp.SystemArchitecture.dataAccessOperation() && args(account,..)")
+        public void validateAccount(Account account) {
+
+        }
+
+
+        @Before("com.xyz.lib.Pointcuts.anyPublicMethod() && @annotation(auditable)")
+         public void audit(Auditable auditable) {
+            AuditCode code = auditable.value();
+            // ...
+         }
+        </code>

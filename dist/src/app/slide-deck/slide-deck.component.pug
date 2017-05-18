@@ -1,0 +1,11 @@
+.reveal
+  .slides
+    section(data-state="title")
+      h1 AOP
+      h2 Add a new Aspect to your Java programming
+    section(*ngFor="let slideDeck of slides;")
+      section(*ngFor="let slide of slideDeck")
+        dynamic-html([content]="slide")
+    section(data-state="title")
+      h1 Thanks!
+      h2 Any questions?
